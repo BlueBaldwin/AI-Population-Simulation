@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AiMovement;
 
 public class AIBrain : MonoBehaviour
 {
@@ -14,9 +15,17 @@ public class AIBrain : MonoBehaviour
    {
       controller = GetComponent<Controller>();
    }
-   
+
+   private void Update()
+   {
+      if (bestAction == null)
+      {
+         FindBestAction(controller.actions);
+      }
+   }
+
    //Loop through all available actions and return the highest scoring action
-   public void BestAction(Action[] allActions)
+   public void FindBestAction(Action[] allActions)
    {
       float score = 0f;
       int index = 0;

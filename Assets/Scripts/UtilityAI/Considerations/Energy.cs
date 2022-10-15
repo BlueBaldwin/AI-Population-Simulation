@@ -7,6 +7,6 @@ public class Energy : Consideration
 {
     public override float ScoreConsideration()
     {
-        return 0.1f;
+        return 0.2f;
     }
 }
