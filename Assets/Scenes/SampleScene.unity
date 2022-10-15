@@ -438,7 +438,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Movement: {fileID: 0}
-  actions: []
+  actions:
+  - {fileID: 11400000, guid: d177768366730da48851a4f6e98f4a4c, type: 2}
+  - {fileID: 11400000, guid: 323e5f7e35c7d04458a77ebdd69f494b, type: 2}
 --- !u!136 &1194786509
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -473,7 +475,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 15f65a0d2b007f740a8e207d10255b28, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -571,7 +573,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0e119ce2a051611459ec8d01204468ff, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

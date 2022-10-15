@@ -22,5 +22,6 @@ public abstract class Action : ScriptableObject
         Score = 0;
     }
 
-    public abstract void Execute();
+    // Dependancy injection - we don't have a referenced Controller in this class, but thats ok because whoever calls this will just need to pass it through
+    public abstract void Execute(Controller animal);
 }
