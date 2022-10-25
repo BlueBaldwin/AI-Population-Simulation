@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using AiMovement;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Energy", menuName = "UtilityAI/Considerations/Energy")]
 public class Energy : Consideration
 {
-    public override float ScoreConsideration()
+    [SerializeField] private AnimationCurve responseCurve;
+    private Stats stats;
+    
+    public override float ScoreConsideration(AnimalController animal)
     {
-        return 0.2f;
+        float score = responseCurve.Evaluate(Mathf.Clamp01(animal.Stats.energy / 100f));
+        return score;
     }
 }

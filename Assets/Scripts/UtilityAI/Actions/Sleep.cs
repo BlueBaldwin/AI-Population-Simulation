@@ -6,8 +6,13 @@ using AiMovement;
 [CreateAssetMenu(fileName = "Sleep", menuName = "UtilityAI/Actions/Sleep")]
 public class Sleep : Action
 {
-    public override void Execute(Controller animal)
+    public override void Execute(AnimalController animal)
     {
-        animal.Sleep(3);
+        animal.Sleep(1);
+    }
+
+    public override void SetRequiredDestination(AnimalController animal)
+    {
+        
     }
 }

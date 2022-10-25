@@ -9,37 +9,40 @@ public class AIBrain : MonoBehaviour
    public Action bestAction { get; set; }
    public bool doneDeciding { get; set; }
    
-   private Controller controller;
+   [SerializeField] Action[] allActions;
+   
+   private AnimalController _animalController;
+
    
    private void Start()
    {
-      controller = GetComponent<Controller>();
+      _animalController = GetComponent<AnimalController>();
    }
 
    private void Update()
    {
-      if (bestAction == null)
-      {
-         FindBestAction(controller.actions);
-      }
+      // if (bestAction == null)
+      // {
+      //    FindBestAction(_animalController.actions);
+      // }
    }
 
    //Loop through all available actions and return the highest scoring action
-   public void FindBestAction(Action[] allActions)
+   public void FindBestAction()
    {
       float score = 0f;
       int index = 0;
       // Compare scores of all actions againts the current best action
       for (int i = 0; i < allActions.Length; i++)
       {
-         // If the pos in all actions array is greater than score then store it's index and asign to our temp var
+         // If the pos in all actions array is greater than score then store it's index and assign to our temp var
          if (ScoreAction(allActions[i]) > score)
          {
             index = i;
             score = allActions[i].Score;
          }
       }
-      // asigning the best action 
+      // assigning the best action 
       bestAction = allActions[index];
       doneDeciding = true;
    }
@@ -52,7 +55,7 @@ public class AIBrain : MonoBehaviour
       // How much that factor influences the importances of the action it's associated with
       for (int i = 0; i < action.Considerations.Length; i++)
       {
-         float considerationScore = action.Considerations[i].ScoreConsideration();
+         float considerationScore = action.Considerations[i].ScoreConsideration(_animalController);
          // Add to overall score
          score *= considerationScore;
          if (score == 0) // Protect againts multiply by 0
@@ -69,5 +72,10 @@ public class AIBrain : MonoBehaviour
       action.Score = originalScore + (makeupValue * originalScore);
 
       return action.Score;
+   }
+
+   public void DecideBestAction()
+   {
+      
    }
 }

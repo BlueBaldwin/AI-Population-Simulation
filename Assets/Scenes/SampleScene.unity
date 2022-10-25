@@ -373,7 +373,7 @@ GameObject:
   - component: {fileID: 1194786506}
   - component: {fileID: 1194786505}
   m_Layer: 0
-  m_Name: Animal
+  m_Name: Rabbit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -441,6 +441,7 @@ MonoBehaviour:
   actions:
   - {fileID: 11400000, guid: d177768366730da48851a4f6e98f4a4c, type: 2}
   - {fileID: 11400000, guid: 323e5f7e35c7d04458a77ebdd69f494b, type: 2}
+  stats: {fileID: 11400000, guid: 315e61a15afd9c649a25975a925225fa, type: 2}
 --- !u!136 &1194786509
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -518,7 +519,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1777318122
 GameObject:
@@ -616,5 +617,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

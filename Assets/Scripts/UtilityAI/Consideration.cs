@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AiMovement;
 using UnityEngine;
 
 public abstract class Consideration : ScriptableObject // Weightings for each action
@@ -19,5 +20,5 @@ public abstract class Consideration : ScriptableObject // Weightings for each ac
       _score = 0;
    }
 
-   public abstract float ScoreConsideration();
+   public abstract float ScoreConsideration(AnimalController animal);
 }
