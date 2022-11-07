@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff47f3abb8f18db4dac37efcffdebb59, type: 3}
   m_Name: Energy
   m_EditorClassIdentifier: 
-  name: 
+  name: Energy
   responseCurve:
     serializedVersion: 2
     m_Curve:

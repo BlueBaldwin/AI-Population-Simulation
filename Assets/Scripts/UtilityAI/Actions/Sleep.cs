@@ -13,6 +13,6 @@ public class Sleep : Action
 
     public override void SetRequiredDestination(AnimalController animal)
     {
-        
+       RequiredDestination = animal.aTransform.transform;
     }
 }

@@ -11,36 +11,39 @@ namespace AiMovement
     }
     public class AnimalController : MonoBehaviour
     {
-        public AIMovement Movement;
-        public AIBrain AIBrain { get; set; }
-        public Stats Stats { get; set; }
+        public GameObject aTransform;
+        public AIMovement movement;
+        public AIBrain aIBrain { get; set; }
+        public Stats baseStats;
+        public Stats stats;
+        public MapContext mapContext;
         public STATE CurrentState { get; set; }
+        private HUD hud;
         
-        void Start()
+        void Awake()
         {
-            Movement = GetComponent<AIMovement>();
-            AIBrain = GetComponent<AIBrain>();
+            movement = GetComponent<AIMovement>();
+            aIBrain = GetComponent<AIBrain>();
+           // mapContext = GetComponent<MapContext>();
+            CurrentState = STATE.DECIDE;
+            hud = GetComponentInChildren<HUD>();
+            stats = baseStats.CreateCopy();
         }
-
         private void Update()
         {
-            // if (aiBrain.doneDeciding)
-            // {
-            //     aiBrain.doneDeciding = false;
-            //     aiBrain.bestAction.Execute(this);
-            // }
             FSMTick();
-
+            //Debug.Log("Energy = " + stats.energy + "Hunger = " + stats.hunger);
+            
         }
 
         // Simple finate state machine to control the movement of Animals
         private void FSMTick()
         {
-            if (CurrentState == STATE.MOVE)
+            if (CurrentState == STATE.DECIDE)
             {
-                AIBrain.DecideBestAction();
+                aIBrain.FindBestAction();
                 // If we are at our desired position then change state
-                if (Vector3.Distance(AIBrain.bestAction.RequiredDestination.position, transform.position) < 2f)
+                if (Vector3.Distance(aIBrain.bestAction.RequiredDestination.position, transform.position) < 2f)
                 {
                     CurrentState = STATE.EXECUTE;
                 }
@@ -48,25 +51,26 @@ namespace AiMovement
                 {
                     CurrentState = STATE.MOVE;
                 }
+               
             }
-            else if(CurrentState == STATE.DECIDE)
+            else if(CurrentState == STATE.MOVE)
             {
-                if ((Vector3.Distance(AIBrain.bestAction.RequiredDestination.position, transform.position) < 2f))
+                if ((Vector3.Distance(aIBrain.bestAction.RequiredDestination.position, transform.position) < 2f))
                 {
                     CurrentState = STATE.EXECUTE;
                 }
                 else
                 {
-                    Movement.SetDestination(AIBrain.bestAction.RequiredDestination.position);
+                    movement.SetDestination(aIBrain.bestAction.RequiredDestination.position);
                 }
             }
             else if (CurrentState == STATE.EXECUTE)
             {
-                if (!AIBrain.isBestActionFinished)
+                if (!aIBrain.isBestActionFinished)
                 {
-                    AIBrain.bestAction.Execute(this);
+                    aIBrain.bestAction.Execute(this);
                 }
-                else if(AIBrain.isBestActionFinished)
+                else if(aIBrain.isBestActionFinished)
                 {
                     CurrentState = STATE.DECIDE;
                 }
@@ -75,7 +79,7 @@ namespace AiMovement
 
         public void OnFinishedAction()
         {
-            AIBrain.FindBestAction(actions);
+            aIBrain.FindBestAction();
         }
 
         #region Coroutines
@@ -93,7 +97,7 @@ namespace AiMovement
                 yield return new WaitForSeconds(5);
                 counter--;    
             }
-            Stats.hunger -= 30;
+            stats.hunger -= 30;
             Debug.Log(name + "Hunger decreased by 30");
             OnFinishedAction();
         }
@@ -113,7 +117,7 @@ namespace AiMovement
                 counter--;    
             }
 
-            Stats.energy += 1;
+            stats.energy += 1;
             Debug.Log(name + "Sleep added 1 energy");
             OnFinishedAction();
         }

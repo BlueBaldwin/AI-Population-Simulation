@@ -6,11 +6,10 @@ using AiMovement;
 
 //Define the base class for every action
 public abstract class Action : ScriptableObject
-{
-    public string name;
+{ 
+    // Used to return the current best action for Debugging purposes
     public Consideration[] Considerations;
-
-    private Transform RequiredDestination { get; set; }
+    public Transform RequiredDestination { get; protected set; }
     private float _score;
 
     public float Score

@@ -11,7 +11,8 @@ public class Energy : Consideration
     
     public override float ScoreConsideration(AnimalController animal)
     {
-        float score = responseCurve.Evaluate(Mathf.Clamp01(animal.Stats.energy / 100f));
+        float score = responseCurve.Evaluate(Mathf.Clamp01(animal.stats.energy / 100f));
         return score;
     }
 }
+    

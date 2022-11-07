@@ -8,28 +8,26 @@ public class AIBrain : MonoBehaviour
 {
    public Action bestAction { get; set; }
    public bool doneDeciding { get; set; }
+   public bool isBestActionFinished { get; set; }
+   private HUD hud;
    
    [SerializeField] Action[] allActions;
    
-   private AnimalController _animalController;
+   private AnimalController animal;
 
    
    private void Start()
    {
-      _animalController = GetComponent<AnimalController>();
+      animal = GetComponent<AnimalController>();
+      hud = GetComponentInChildren<HUD>();
+      doneDeciding = false;
+      isBestActionFinished = false;
    }
-
-   private void Update()
-   {
-      // if (bestAction == null)
-      // {
-      //    FindBestAction(_animalController.actions);
-      // }
-   }
-
+   
    //Loop through all available actions and return the highest scoring action
    public void FindBestAction()
    {
+      isBestActionFinished = false;
       float score = 0f;
       int index = 0;
       // Compare scores of all actions againts the current best action
@@ -44,7 +42,9 @@ public class AIBrain : MonoBehaviour
       }
       // assigning the best action 
       bestAction = allActions[index];
+      bestAction.SetRequiredDestination(animal);
       doneDeciding = true;
+      hud.UpdateBestActionText(bestAction.name);
    }
    
   // Loop through and score all considerations and return an average consideration score that will become the overall action score
@@ -55,7 +55,7 @@ public class AIBrain : MonoBehaviour
       // How much that factor influences the importances of the action it's associated with
       for (int i = 0; i < action.Considerations.Length; i++)
       {
-         float considerationScore = action.Considerations[i].ScoreConsideration(_animalController);
+         float considerationScore = action.Considerations[i].ScoreConsideration(animal);
          // Add to overall score
          score *= considerationScore;
          if (score == 0) // Protect againts multiply by 0
@@ -70,12 +70,7 @@ public class AIBrain : MonoBehaviour
       float modFactor = 1 - (1 / action.Considerations.Length);
       float makeupValue = (1 - originalScore) * modFactor;
       action.Score = originalScore + (makeupValue * originalScore);
-
+      hud.UpdateScoreText(action); // Working on this to update the huds action
       return action.Score;
-   }
-
-   public void DecideBestAction()
-   {
-      
    }
 }

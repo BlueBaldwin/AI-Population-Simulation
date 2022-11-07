@@ -6,7 +6,6 @@ using UnityEngine;
 
 public abstract class Consideration : ScriptableObject // Weightings for each action
 {
-   public string name;
    private float _score;
 
    public float Score

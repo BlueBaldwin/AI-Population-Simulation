@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public class AIMovement : MonoBehaviour
 {
     private NavMeshAgent _agent;
+    //public Transform destination;
 
     private void Start()
     {
