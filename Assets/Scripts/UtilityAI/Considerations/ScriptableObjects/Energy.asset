@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff47f3abb8f18db4dac37efcffdebb59, type: 3}
   m_Name: Energy
   m_EditorClassIdentifier: 
-  name: Energy
   responseCurve:
     serializedVersion: 2
     m_Curve:
@@ -26,13 +25,13 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
+      time: 0.84973145
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: -3.3498807
+      outSlope: -3.3498807
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.02408084
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

@@ -1,31 +1,28 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using AiMovement;
 using UnityEngine;
 using TMPro;
+using UtilityAi;
 
-
-public class HUD : MonoBehaviour
-{
-	[SerializeField] private TMP_Text currentAction;
-	[SerializeField] private TMP_Text hunger;
-	[SerializeField] private TMP_Text energy;
-
-	public void UpdateStatsText(int e, int h)
+	public class HUD : MonoBehaviour
 	{
-		//currentAction.text = brain.bestAction;
-		energy.text = e.ToString();
-		hunger.text = h.ToString();
-	}
+		[SerializeField] private GameObject hudCanvas;
+		[SerializeField] private TMP_Text currentAction;
+		[SerializeField] private TMP_Text hunger;
+		[SerializeField] private TMP_Text energy;
 
-	public void UpdateBestActionText(string bestAction)
-	{
-		currentAction.text = "Current Action = " + bestAction;
-	}
+		private void Update()
+		{
+			hudCanvas.transform.LookAt(Camera.main.transform);
+		}
 
-	public void UpdateScoreText(Action action)
-	{
-		Debug.Log(action.name);
+		public void UpdateStatsText(Stats stats)
+		{
+			//currentAction.text = brain.bestAction;
+			energy.text = "Energy: " + stats.Energy.ToString();
+			hunger.text = "Hunger: " + stats.Hunger.ToString();
+		}
+
+		public void UpdateBestActionText(Action bestAction)
+		{
+			currentAction.text = "Current Action = " + bestAction.name;
+		}
 	}
-}
