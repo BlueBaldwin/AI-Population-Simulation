@@ -51,7 +51,7 @@ namespace BehaviorTree
         {
             // Get a list of all rabbits within the sensor's range
             List<GameObject> rabbitsInRange = GetRabbitsInRange();
-
+            
             // Check if any rabbits are within the sensor's field of view
             foreach (GameObject rabbit in rabbitsInRange)
             {
@@ -63,7 +63,7 @@ namespace BehaviorTree
                 }
             }
 
-            // If no rabbits are within the sensor's field of view, return false
+            //If no rabbits are within the sensor's field of view, return false
             return false;
         }
         

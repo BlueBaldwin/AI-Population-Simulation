@@ -23,13 +23,13 @@ namespace BehaviorTree
     
         void Update()
         {
-            _behaviorTree.Update();
-            bool preyInSight = _aiSensor.IsPreyInSight();
+            _behaviorTree.Update(); 
+            bool preyInSight = _aiSensor.bIsInSight;
         }
 
         public GameObject GetRabbitsInRange()
         {
-            
+            return new GameObject();
         }
     }
 }

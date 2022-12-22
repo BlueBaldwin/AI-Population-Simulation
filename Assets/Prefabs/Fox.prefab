@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2483559982578871301}
-  - component: {fileID: 5634685598947431779}
-  m_Layer: 0
+  - component: {fileID: 7967818973009934092}
+  m_Layer: 8
   m_Name: Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 2007312861542640431}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5634685598947431779
+--- !u!114 &7967818973009934092
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,17 +41,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 220917500935496660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cbb0bd50a586074c9a7a9ffd44c09e4, type: 3}
+  m_Script: {fileID: 11500000, guid: 57e46421017526540976ca8cfddfa6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 10
   angle: 30
-  _height: 2
-  meshColor: {r: 1, g: 0, b: 0, a: 1}
-  scanFrequency: 30
+  _height: 1
+  meshColor: {r: 0.4811321, g: 0, b: 0, a: 0.39215687}
+  scanFrequency: 0
   detectionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2147483647
   occlusionLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -68,9 +68,9 @@ GameObject:
   - component: {fileID: 2911399540027208106}
   - component: {fileID: 1609495024790084036}
   - component: {fileID: 457504338675860293}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fox
-  m_TagString: Untagged
+  m_TagString: Fox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

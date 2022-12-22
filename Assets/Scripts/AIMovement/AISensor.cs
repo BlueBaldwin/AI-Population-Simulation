@@ -5,9 +5,9 @@ using UtilityAi;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class AISensor : MonoBehaviour
+public abstract class AISensor : MonoBehaviour
 {
-    RabbitController rabbitController;
+    public bool bIsInSight { get; protected set; }
     
     // [SerializeField] private GameObject AiSensor;
     public float distance = 10;
@@ -18,26 +18,24 @@ public class AISensor : MonoBehaviour
     public LayerMask detectionLayer;
     public LayerMask occlusionLayer;
     public List<GameObject> objectsWithinSensor = new List<GameObject>(); // A list to store all those agents within the sensors cone
+    
     // Hash set does not allow duplicate entries
     public HashSet<Vector3> previousFoodLocations = new HashSet<Vector3>();
 
-    private Collider[] _colliders = new Collider[50];   // Storing the objects of all within the sphere radius
+    protected Collider[] _colliders = new Collider[50];   // Storing the objects of all within the sphere radius
     private Mesh _mesh;
-    private int _count;
+    protected int _count;
     private float _scanIntervall;
     private float _scanTimer;
-
-
 
     // Start is called before the first frame update
     void Start()
     {
         _scanIntervall = 1.0f / scanFrequency;
-        rabbitController = GetComponentInParent<RabbitController>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         _scanTimer -= Time.deltaTime;
         if (_scanTimer < 0)
@@ -47,34 +45,10 @@ public class AISensor : MonoBehaviour
         }
     }
 
-    private void Scan()
-    {
-        _count = Physics.OverlapSphereNonAlloc(transform.position, distance, _colliders, detectionLayer, QueryTriggerInteraction.Collide);
-        objectsWithinSensor.Clear();
-        for (int i = 0; i < _count; i++)
-        {
-            GameObject g = _colliders[i].gameObject;
-            if (g == null)
-            {
-                Debug.LogError("GameObject is null!");
-                continue;
-            }
-            
-            if (IsInSight(g))
-            {
-                objectsWithinSensor.Add(g);
-                // If the game object is a food object, move to it
-                if (g.CompareTag("Food"))
-                {
-                    rabbitController.SetFoodObject(g);
-                    previousFoodLocations.Add(g.transform.position);
-                }
-            }
-        }
-    }
+    protected abstract void Scan();
 
 
-    private bool IsInSight(GameObject g)
+    protected bool IsInSight(GameObject g)
     {
         Vector3 origin = transform.position;
         Vector3 destination = g.transform.position;
