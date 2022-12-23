@@ -50,18 +50,18 @@ namespace BehaviorTree
         private bool IsPreyInSight()
         {
             // Get a list of all rabbits within the sensor's range
-            List<GameObject> rabbitsInRange = GetRabbitsInRange();
+            //List<GameObject> rabbitsInRange = GetRabbitsInRange();
             
             // Check if any rabbits are within the sensor's field of view
-            foreach (GameObject rabbit in rabbitsInRange)
-            {
-                // Check if the rabbit is within the sensor's field of view
-                if (IsInFieldOfView(rabbit))
-                {
-                    // If the rabbit is within the sensor's field of view, return true
-                    return true;
-                }
-            }
+            // foreach (GameObject rabbit in rabbitsInRange)
+            // {
+            //     // Check if the rabbit is within the sensor's field of view
+            //     if (IsInFieldOfView(rabbit))
+            //     {
+            //         // If the rabbit is within the sensor's field of view, return true
+            //         return true;
+            //     }
+            // }
 
             //If no rabbits are within the sensor's field of view, return false
             return false;

@@ -23,8 +23,7 @@ namespace BehaviorTree
     
         void Update()
         {
-            _behaviorTree.Update(); 
-            bool preyInSight = _aiSensor.bIsInSight;
+            _behaviorTree.Update();
         }
 
         public GameObject GetRabbitsInRange()

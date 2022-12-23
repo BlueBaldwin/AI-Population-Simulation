@@ -208,11 +208,11 @@ namespace UtilityAi
         }
         
         // Food consumption and regeneration 
-        IEnumerator ReactivateFoodObject(GameObject gameObject, float delay)
+        IEnumerator ReactivateFoodObject(GameObject food, float delay)
         {
-            gameObject.SetActive(false);
+            food.SetActive(false);
             yield return new WaitForSeconds(delay);
-            gameObject.SetActive(true);
+            food.SetActive(true);
         }
         
         // Public function to pass over any food found by the scanner

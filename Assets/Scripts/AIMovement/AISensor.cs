@@ -5,8 +5,10 @@ using UtilityAi;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public abstract class AISensor : MonoBehaviour
+public class AISensor : MonoBehaviour
 {
+    RabbitController _rabbitController;
+    
     public bool bIsInSight { get; protected set; }
     
     // [SerializeField] private GameObject AiSensor;
@@ -17,25 +19,31 @@ public abstract class AISensor : MonoBehaviour
     public int scanFrequency;
     public LayerMask detectionLayer;
     public LayerMask occlusionLayer;
-    public List<GameObject> objectsWithinSensor = new List<GameObject>(); // A list to store all those agents within the sensors cone
-    
+    public List<GameObject> objectsWithinSensor; // A list to store all those agents within the sensors cone
+    [SerializeField] private List<GameObject> rabbitsInRange = new List<GameObject>();
+    [SerializeField] private List<GameObject> foxesInRange = new List<GameObject>();
+    [SerializeField] private List<GameObject> foodInRange = new List<GameObject>();
     // Hash set does not allow duplicate entries
     public HashSet<Vector3> previousFoodLocations = new HashSet<Vector3>();
 
-    protected Collider[] _colliders = new Collider[50];   // Storing the objects of all within the sphere radius
+    private Collider[] _colliders = new Collider[50];   // Storing the objects of all within the sphere radius
+    private GameObject _thisGameObject;
     private Mesh _mesh;
-    protected int _count;
+    private int _count;
     private float _scanIntervall;
     private float _scanTimer;
-
+    
     // Start is called before the first frame update
     void Start()
     {
         _scanIntervall = 1.0f / scanFrequency;
+        _rabbitController = GetComponentInParent<RabbitController>();
+        _thisGameObject = gameObject;
+        objectsWithinSensor = new List<GameObject>();
     }
-
+    
     // Update is called once per frame
-    protected virtual void Update()
+    private void Update()
     {
         _scanTimer -= Time.deltaTime;
         if (_scanTimer < 0)
@@ -44,11 +52,51 @@ public abstract class AISensor : MonoBehaviour
             Scan();
         }
     }
+    
+    private void Scan()
+    {
+        // Overlap the sphere and get all colliders within the sensor's range
+        _count = Physics.OverlapSphereNonAlloc(transform.position, distance, _colliders, detectionLayer, QueryTriggerInteraction.Collide);
 
-    protected abstract void Scan();
+        // Clear the objectsWithinSensor list for this game object
+        objectsWithinSensor.Clear();
+        
+        for (int i = 0; i < _count; i++)
+        {
+            GameObject g = _colliders[i].gameObject;
+            if (g == null)
+            {
+                Debug.LogError("GameObject is null!");
+                break;
+            }
 
+            if (IsInSight(g))
+            {
+                objectsWithinSensor.Add(g);
+            }
+        }
 
-    protected bool IsInSight(GameObject g)
+        // Seperate all objects within the scanner into lists
+        rabbitsInRange = SensorUtility.GetObjectsInRange(this, objectsWithinSensor,"Rabbit");
+        foxesInRange = SensorUtility.GetObjectsInRange(this, objectsWithinSensor, "Fox");
+        foodInRange = SensorUtility.GetObjectsInRange(this, objectsWithinSensor, "Food");
+
+        // Add the rabbits, foxes, and food to the objectsWithinSensor list
+        objectsWithinSensor.AddRange(rabbitsInRange);
+        objectsWithinSensor.AddRange(foxesInRange);
+        objectsWithinSensor.AddRange(foodInRange);
+        // Add the rabbits and foxes to the objectsWithinSensor list
+        objectsWithinSensor.AddRange(rabbitsInRange);
+        objectsWithinSensor.AddRange(foxesInRange);
+        
+       foreach (GameObject g in foodInRange)
+        {
+            _rabbitController.SetFoodObject(g);
+            previousFoodLocations.Add(g.transform.position);
+        }
+    }
+
+    private bool IsInSight(GameObject g)
     {
         Vector3 origin = transform.position;
         Vector3 destination = g.transform.position;
@@ -58,7 +106,7 @@ public abstract class AISensor : MonoBehaviour
         {
             return false;
         }
-
+    
         // Checking if the agent is within the sensors angle - 0 out the y value to ensure its y position is not effecting the check
         direction.y = 0;
         float deltaAngle = Vector3.Angle(direction, transform.forward);
@@ -66,7 +114,7 @@ public abstract class AISensor : MonoBehaviour
         {
             return false;
         }
-
+    
         //Checking for occlusion
         origin.y += _height / 2;
         destination.y = origin.y;
@@ -75,17 +123,17 @@ public abstract class AISensor : MonoBehaviour
             return false;
         }
         return true;
-
+    
     }
-
+    
     Mesh CreateWedgeMesh()
     {
         Mesh mesh = new Mesh();
-
+    
         int segments = 10;
         int numTriangles = (segments * 4) + 2 + 2;      // each segment has 4 triangles, 2x far side 1x both top and bottom
         int numVertices = numTriangles * 3;             // 3 Vertices for every triangle
-
+    
         Vector3[] vertices = new Vector3[numVertices]; // Filling with the total via the calc above
         int[] triangles = new int[numVertices];         // Ignoring index
         
@@ -98,14 +146,14 @@ public abstract class AISensor : MonoBehaviour
         Vector3 topCenter = bottomCenter + new Vector3(0, _height, 0);
         Vector3 topLeft = bottomLeft + new Vector3(0, _height, 0);
         Vector3 topRight = bottomRight + new Vector3(0, _height, 0);
-
+    
         int vert = 0; // Keeping track within the vert array
-
+    
         // Left side
         vertices[vert++] = bottomCenter;
         vertices[vert++] = bottomLeft;
         vertices[vert++] = topLeft; 
-
+    
         vertices[vert++] = topLeft;
         vertices[vert++] = topCenter;
         vertices[vert++] = bottomCenter; 
@@ -118,7 +166,7 @@ public abstract class AISensor : MonoBehaviour
         vertices[vert++] = topRight;
         vertices[vert++] = bottomRight;
         vertices[vert++] = bottomCenter;
-
+    
         // SUBDIVISION - Recalculating the angle of the wedge
         float currentAngle = -angle; // Left side of the entire wedge
         float deltaAngle = (angle * 2) / segments; // Delta - the angle of segment
@@ -128,7 +176,7 @@ public abstract class AISensor : MonoBehaviour
             // Each loop redefines the bottom left and bottom right as we loop through each segment
             bottomLeft = Quaternion.Euler(0, currentAngle, 0) * Vector3.forward * distance;
             bottomRight = Quaternion.Euler(0, currentAngle + deltaAngle, 0) * Vector3.forward * distance;
-
+    
             topLeft = bottomLeft + new Vector3(0, _height, 0);
             topRight = bottomRight + new Vector3(0, _height, 0);
             
@@ -159,7 +207,7 @@ public abstract class AISensor : MonoBehaviour
         {
             triangles[i] = i;
         }
-
+    
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
@@ -185,7 +233,7 @@ public abstract class AISensor : MonoBehaviour
             // Drawing a sphere at the objects location
             Gizmos.DrawWireSphere(_colliders[i].transform.position, 1.0f);
         }
-
+    
         foreach (var item in objectsWithinSensor)
         {
              Gizmos.color = Color.red;
