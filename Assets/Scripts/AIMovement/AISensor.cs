@@ -7,10 +7,6 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class AISensor : MonoBehaviour
 {
-    RabbitController _rabbitController;
-    
-    public bool bIsInSight { get; protected set; }
-    
     // [SerializeField] private GameObject AiSensor;
     public float distance = 10;
     public float angle = 30;
@@ -20,9 +16,9 @@ public class AISensor : MonoBehaviour
     public LayerMask detectionLayer;
     public LayerMask occlusionLayer;
     public List<GameObject> objectsWithinSensor; // A list to store all those agents within the sensors cone
-    [SerializeField] private List<GameObject> rabbitsInRange = new List<GameObject>();
-    [SerializeField] private List<GameObject> foxesInRange = new List<GameObject>();
-    [SerializeField] private List<GameObject> foodInRange = new List<GameObject>();
+    [SerializeField] protected List<GameObject> rabbitsInRange = new List<GameObject>();
+    [SerializeField] protected List<GameObject> foxesInRange = new List<GameObject>();
+    [SerializeField] protected List<GameObject> foodInRange = new List<GameObject>();
     // Hash set does not allow duplicate entries
     public HashSet<Vector3> previousFoodLocations = new HashSet<Vector3>();
 
@@ -34,10 +30,9 @@ public class AISensor : MonoBehaviour
     private float _scanTimer;
     
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         _scanIntervall = 1.0f / scanFrequency;
-        _rabbitController = GetComponentInParent<RabbitController>();
         _thisGameObject = gameObject;
         objectsWithinSensor = new List<GameObject>();
     }
@@ -53,7 +48,7 @@ public class AISensor : MonoBehaviour
         }
     }
     
-    private void Scan()
+    protected virtual void Scan()
     {
         // Overlap the sphere and get all colliders within the sensor's range
         _count = Physics.OverlapSphereNonAlloc(transform.position, distance, _colliders, detectionLayer, QueryTriggerInteraction.Collide);
@@ -85,15 +80,6 @@ public class AISensor : MonoBehaviour
         objectsWithinSensor.AddRange(rabbitsInRange);
         objectsWithinSensor.AddRange(foxesInRange);
         objectsWithinSensor.AddRange(foodInRange);
-        // Add the rabbits and foxes to the objectsWithinSensor list
-        objectsWithinSensor.AddRange(rabbitsInRange);
-        objectsWithinSensor.AddRange(foxesInRange);
-        
-       foreach (GameObject g in foodInRange)
-        {
-            _rabbitController.SetFoodObject(g);
-            previousFoodLocations.Add(g.transform.position);
-        }
     }
 
     private bool IsInSight(GameObject g)

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace BehaviorTree
 {
@@ -9,16 +10,18 @@ namespace BehaviorTree
     {
         private FoxBehaviorTree _behaviorTree;
 
-        private AISensor _aiSensor;
+        private FoxSensor _foxSensor;
+        
 
         private void Awake()
         {
-            _aiSensor = GetComponentInChildren<AISensor>();
+            _foxSensor = GetComponentInChildren<FoxSensor>();
         }
 
         void Start()
         {
-            _behaviorTree = new FoxBehaviorTree();
+            // _behaviorTree = new FoxBehaviorTree();
+          //  _behaviorTree._foxSensor = GetComponent<FoxSensor>();
         }
     
         void Update()
@@ -26,9 +29,17 @@ namespace BehaviorTree
             _behaviorTree.Update();
         }
 
-        public GameObject GetRabbitsInRange()
+        // Getting the component through this method instead of public fields
+        public T GetFoxComponent<T>(string componentName) where T : Component
         {
-            return new GameObject();
+            T component = GetComponent<T>();
+
+            if (component == null)
+            {
+                Debug.LogError($"Unable to find component of type {typeof(T)} with name {componentName}");
+                return null;
+            }
+            return component;
         }
     }
 }

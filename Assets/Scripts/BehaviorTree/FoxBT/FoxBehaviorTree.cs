@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+
 namespace BehaviorTree
 {
     public class FoxBehaviorTree : BehaviorTree 
     {
-        public FoxBehaviorTree()
+       private bool _isFollowingScent = false;
+       private Vector3 _scentLocation = Vector3.zero;
+        
+        public FoxBehaviorTree(FoxController _foxController)
         {
             // Create root node
             SelectorNode root = new SelectorNode();
@@ -30,12 +35,13 @@ namespace BehaviorTree
             // Set root node as the tree's root node
             SetRootNode(root);
         }
-        
+
         // Action methods
         private BehaviorTreeStatus SearchForPrey()
         {
-            // Code for searching for prey goes here
-            // Return SUCCESS if prey is found, FAILURE if not
+            // searching for rabbit tracks
+            // following the rabbit's smell or noise
+            
             return BehaviorTreeStatus.TEST;
         }
         
@@ -49,28 +55,19 @@ namespace BehaviorTree
         // Condition methods that must be met in order for the node to be executed
         private bool IsPreyInSight()
         {
-            // Get a list of all rabbits within the sensor's range
-            //List<GameObject> rabbitsInRange = GetRabbitsInRange();
-            
             // Check if any rabbits are within the sensor's field of view
-            // foreach (GameObject rabbit in rabbitsInRange)
-            // {
-            //     // Check if the rabbit is within the sensor's field of view
-            //     if (IsInFieldOfView(rabbit))
-            //     {
-            //         // If the rabbit is within the sensor's field of view, return true
-            //         return true;
-            //     }
-            // }
-
-            //If no rabbits are within the sensor's field of view, return false
-            return false;
+             // foreach (GameObject rabbit in _foxSensor.GetRabbitsInRange())
+             // {
+             //     return true;
+             // }
+             return false;
         }
         
         private bool IsPreyCloseEnough()
         {
-            // Code for checking if prey is close enough to attack goes here
-            // Return true if prey is close enough, false if not
+            // If yes attack
+            
+            // If no stalk until close another
             return false;
         }
     }
