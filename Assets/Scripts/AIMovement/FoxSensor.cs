@@ -7,6 +7,7 @@ using UtilityAi;
 public class FoxSensor : AISensor
 {
    FoxController _foxController;
+   public bool bFoundTrace { get; private set; }
 
    protected override void Start()
    {
@@ -17,6 +18,11 @@ public class FoxSensor : AISensor
    public List<GameObject> GetRabbitsInRange()
    {
       return rabbitsInRange;
+   }
+   
+   private bool ScanForRabbitTrace()
+   {
+      return false;
    }
 
 }

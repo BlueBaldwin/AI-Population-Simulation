@@ -573,6 +573,10 @@ MonoBehaviour:
   sleepTime: 5
   eatTime: 5
   maxDistanceFromHome: 20
+  rabbitDroppingPrefab: {fileID: 3184596546567302646, guid: db7d6dab8d2d0c2439873d43431ee008,
+    type: 3}
+  rabbitDroppingSpawnRadius: 1
+  rabbitDroppingSpawnChance: 0.01
   agent: {fileID: 0}
   movement: {fileID: 0}
   sensor: {fileID: 0}
@@ -868,7 +872,13 @@ MonoBehaviour:
   occlusionLayer:
     serializedVersion: 2
     m_Bits: 512
-  objectsWithinSensor: []
-  rabbitsInRange: []
+  objectsWithinSensor:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  rabbitsInRange:
+  - {fileID: 0}
   foxesInRange: []
-  foodInRange: []
+  foodInRange:
+  - {fileID: 0}

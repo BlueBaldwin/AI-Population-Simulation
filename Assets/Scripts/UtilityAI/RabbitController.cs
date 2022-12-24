@@ -25,8 +25,13 @@ namespace UtilityAi
         [SerializeField] private int eatTime;
 
         [SerializeField] private float maxDistanceFromHome = 20.0f;
+        [SerializeField] private GameObject rabbitDroppingPrefab;
+        [SerializeField] float rabbitDroppingSpawnRadius = 1.0f;
+        [SerializeField] float rabbitDroppingSpawnChance = 0.1f;
 
         private bool bFoundFood;
+        private bool bIsAtHome;
+        private bool bJustEaten;
         
         private GameObject foodObject;
 
@@ -57,6 +62,7 @@ namespace UtilityAi
             movement = GetComponent<AIMovement>();
             sensor = GetComponentInChildren<AISensor>();
             agent = GetComponent<NavMeshAgent>();
+            bJustEaten = false;
         }
 
         private void Start()
@@ -68,6 +74,7 @@ namespace UtilityAi
         {
             FSMTick();
             _hud.UpdateStatsText(stats);
+            SpawnRabbitDroppings();
         }
 
         // Simple Finite State machine to control the movement of the rabbit
@@ -134,7 +141,7 @@ namespace UtilityAi
                 // If the rabbit has not found food, sample a new position and set it as the destination
                 if (!agent.hasPath && agent.remainingDistance < 0.5 && CurrentState != STATE.MOVE)
                 {
-                    // Calculate the current direction of the rabbit
+                    // To be implemented later for moving within the forward direction only until out of home bounds
                     Vector3 currentDirection = transform.forward;
 
                     // Generate a random point within the unit sphere centered at the origin
@@ -160,6 +167,20 @@ namespace UtilityAi
             }
         }
 
+        private void SpawnRabbitDroppings()
+        {
+            // Check if the rabbit is within the specified distance from its home
+            bIsAtHome = Vector3.Distance(transform.position, rabbitsHome.transform.position) <= maxDistanceFromHome;
+            if (!bIsAtHome && !agent.isStopped && bJustEaten)
+            {
+                if (Random.value < rabbitDroppingSpawnChance)
+                {
+                    Vector3 randomPosition = transform.position + Random.insideUnitSphere * rabbitDroppingSpawnRadius;
+                    Instantiate(rabbitDroppingPrefab, randomPosition, Quaternion.identity);
+                }
+            } 
+        }
+
         // Found food bool true so set the destination to 
         private void MoveToFood(GameObject food)
         {
@@ -168,6 +189,7 @@ namespace UtilityAi
             {
                 StartCoroutine(PerformAction("Eat", eatTime));
                 bFoundFood = false;
+                bJustEaten = true;
                 StartCoroutine(ReactivateFoodObject(food, 20));
             }
         }

@@ -60,12 +60,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   rabbitsInRange:
   - {fileID: 0}
-  foxesInRange:
-  - {fileID: 0}
+  foxesInRange: []
   foodInRange:
   - {fileID: 0}
 --- !u!1 &1069318328368666047
@@ -180,3 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56f2757f71e92b5479306155ff966a9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackRange: 0
+  foxesHome: {fileID: 1447123127983410037, guid: 4c50b58f42d9a114eaaef12d11baae95,
+    type: 3}
+  maxDistanceFromHome: 30
