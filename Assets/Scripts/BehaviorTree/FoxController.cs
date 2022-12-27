@@ -9,7 +9,7 @@ namespace BehaviorTree
 {
     public class FoxController : MonoBehaviour
     {
-        private FoxBehaviorTree _behaviorTree;
+        private FoxBehaviorTree _foxBehaviorTree;
         [SerializeField] private float attackRange;
         [SerializeField] private GameObject foxesHome;
         private AIMovement _aiMovement;
@@ -22,10 +22,10 @@ namespace BehaviorTree
 
         private void Awake()
         {
-            _behaviorTree = new FoxBehaviorTree(this);
             _foxSensor = GetComponentInChildren<FoxSensor>();
             _foxEntity = GetComponent<NavMeshAgent>();
             _aiMovement = GetComponent<AIMovement>();
+            _foxBehaviorTree = new FoxBehaviorTree(this, _foxSensor);
         }
 
         private void Start()
@@ -35,7 +35,7 @@ namespace BehaviorTree
 
         void Update()
         {
-            _behaviorTree.Update();
+            _foxBehaviorTree.Update();
         }
 
         public void Wander()
@@ -57,6 +57,21 @@ namespace BehaviorTree
             {
                 _aiMovement.SetDestination(foxesHome.transform.position);
             }
+        }
+
+        public void MoveTowardsScent(Vector3 dropping)
+        {
+            _aiMovement.SetDestination(dropping);
+        }
+
+        public bool GoToSleep()
+        {
+            _aiMovement.SetDestination(foxesHome.transform.position);
+            if (_foxEntity.remainingDistance <= 0.1)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

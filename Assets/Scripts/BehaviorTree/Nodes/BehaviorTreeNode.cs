@@ -9,7 +9,6 @@ namespace BehaviorTree
         SUCCESS,
         FAILURE,
         RUNNING,
-        TEST
     }
 
     public abstract class BehaviorTreeNode
@@ -26,11 +25,6 @@ namespace BehaviorTree
             children.Add(child);
         }
 
-        public BehaviorTreeStatus Update()
-        {
-            return BehaviorTreeStatus.FAILURE;
-        }
-    
         public abstract BehaviorTreeStatus Execute();
         public abstract bool CheckPreconditions();
     }

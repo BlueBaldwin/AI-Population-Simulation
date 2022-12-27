@@ -19,6 +19,7 @@ public class AISensor : MonoBehaviour
     [SerializeField] protected List<GameObject> rabbitsInRange = new List<GameObject>();
     [SerializeField] protected List<GameObject> foxesInRange = new List<GameObject>();
     [SerializeField] protected List<GameObject> foodInRange = new List<GameObject>();
+    [SerializeField] protected List<GameObject> droppingsInRange = new List<GameObject>();
     // Hash set does not allow duplicate entries
     public HashSet<Vector3> previousFoodLocations = new HashSet<Vector3>();
 
@@ -38,7 +39,7 @@ public class AISensor : MonoBehaviour
     }
     
     // Update is called once per frame
-    private void Update()
+    protected virtual void Update()
     {
         _scanTimer -= Time.deltaTime;
         if (_scanTimer < 0)
@@ -72,17 +73,20 @@ public class AISensor : MonoBehaviour
         }
 
         // Seperate all objects within the scanner into lists
-        rabbitsInRange = SensorUtility.GetObjectsInRange(this, objectsWithinSensor,"Rabbit");
-        foxesInRange = SensorUtility.GetObjectsInRange(this, objectsWithinSensor, "Fox");
-        foodInRange = SensorUtility.GetObjectsInRange(this, objectsWithinSensor, "Food");
+        rabbitsInRange = SensorUtility.GetObjectsInRange(this,"Rabbit");
+        foxesInRange = SensorUtility.GetObjectsInRange(this, "Fox");
+        foodInRange = SensorUtility.GetObjectsInRange(this, "Food");
+        droppingsInRange = SensorUtility.GetObjectsInRange(this, "Dropping");
 
         // Add the rabbits, foxes, and food to the objectsWithinSensor list
         objectsWithinSensor.AddRange(rabbitsInRange);
         objectsWithinSensor.AddRange(foxesInRange);
         objectsWithinSensor.AddRange(foodInRange);
+        objectsWithinSensor.AddRange(droppingsInRange);
+        
     }
 
-    private bool IsInSight(GameObject g)
+    protected bool IsInSight(GameObject g)
     {
         Vector3 origin = transform.position;
         Vector3 destination = g.transform.position;
@@ -111,8 +115,8 @@ public class AISensor : MonoBehaviour
         return true;
     
     }
-    
-    Mesh CreateWedgeMesh()
+
+    protected Mesh CreateWedgeMesh()
     {
         Mesh mesh = new Mesh();
     
@@ -200,12 +204,12 @@ public class AISensor : MonoBehaviour
         
         return mesh;
     }
-    private void OnValidate()
+    protected void OnValidate()
     {
         _scanIntervall = 1.0f / scanFrequency;
         _mesh = CreateWedgeMesh();
     }
-    private void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         if (_mesh)
         {
@@ -219,7 +223,6 @@ public class AISensor : MonoBehaviour
             // Drawing a sphere at the objects location
             Gizmos.DrawWireSphere(_colliders[i].transform.position, 1.0f);
         }
-    
         foreach (var item in objectsWithinSensor)
         {
              Gizmos.color = Color.red;

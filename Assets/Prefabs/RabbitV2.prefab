@@ -576,7 +576,7 @@ MonoBehaviour:
   rabbitDroppingPrefab: {fileID: 3184596546567302646, guid: db7d6dab8d2d0c2439873d43431ee008,
     type: 3}
   rabbitDroppingSpawnRadius: 1
-  rabbitDroppingSpawnChance: 0.01
+  rabbitDroppingSpawnChance: 0.5
   agent: {fileID: 0}
   movement: {fileID: 0}
   sensor: {fileID: 0}

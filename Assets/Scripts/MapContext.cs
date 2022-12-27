@@ -10,6 +10,8 @@ public class MapContext : MonoBehaviour
 	[SerializeField] int foodQty;
 	[SerializeField] GameObject rabbitFood;
 	[SerializeField] GameObject ground;
+	[SerializeField] float spawnRadius;
+	[SerializeField] float spawnBoarder;
 	
 	// public GameObject home;
  //    public GameObject water;
@@ -37,14 +39,43 @@ public class MapContext : MonoBehaviour
  
      private List<Transform> SpawnRabbitFood()
      {
+	     float attempts = 0;
 	     List<Transform> rabbitFoodTransforms = new List<Transform>();
 	     for (int i = 0; i < foodQty; i++)
 	     {
-		     float x = Random.Range(bounds.min.x, bounds.max.x);
-		     float z = Random.Range(bounds.min.z, bounds.max.z); 
-		     GameObject g = Instantiate(rabbitFood, new Vector3(x, 0.5f, z), Quaternion.Euler(0, Random.Range(0, 360), 0));
-		     g.name = "RabbitFood " + i;
-		     rabbitFoodTransforms.Add(g.transform);
+		     float x = Random.Range(bounds.min.x + spawnBoarder, bounds.max.x - spawnBoarder);
+		     float z = Random.Range(bounds.min.z + spawnBoarder, bounds.max.z - spawnBoarder);
+		     Vector3 randomPos = new Vector3(x, 0.5f, z);
+
+		     // Check if there is already a rabbit food object within the radius
+		     bool validSpawnPos = true;
+		     Collider[] colliders = Physics.OverlapSphere(randomPos, spawnRadius);
+		     foreach (Collider collider in colliders)
+		     {
+			     if (collider.gameObject.CompareTag("Food"))
+			     {
+				     validSpawnPos = false;
+				     attempts++;
+				     break;
+			     }
+
+			     if (attempts >= 100)
+			     {
+				     Debug.LogError("Can't spawn that radius");
+			     }
+		     }
+
+		     // Spawn if valid or reduce the count
+		     if (validSpawnPos)
+		     {
+			     GameObject g = Instantiate(rabbitFood, randomPos, Quaternion.Euler(0, Random.Range(0, 360), 0));
+			     g.name = "RabbitFood " + i;
+			     rabbitFoodTransforms.Add(g.transform);
+		     }
+		     else
+		     {
+			     i--;
+		     }
 	     }
 	     return rabbitFoodTransforms;
      }

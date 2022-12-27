@@ -6,7 +6,7 @@ namespace BehaviorTree
 {
     public class BehaviorTree
     {
-        private BehaviorTreeNode _rootNode;
+        protected BehaviorTreeNode _rootNode;
         private List<BehaviorTreeNode> _nodes;
     
         public BehaviorTree()
@@ -24,7 +24,7 @@ namespace BehaviorTree
             _nodes.Add(node);
         }
     
-        public void Update()
+        public virtual void Update()
         {
             foreach (BehaviorTreeNode node in _nodes)
             {

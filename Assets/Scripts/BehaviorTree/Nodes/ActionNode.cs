@@ -18,13 +18,13 @@ namespace BehaviorTree
 		
 		public override BehaviorTreeStatus Execute()
 		{
-			// the code that performs a specific action, such as moving the fox towards its prey or attacking the prey.
-			return BehaviorTreeStatus.TEST;
+			// Call the action delegate and return its result
+			return _action();
 		}
 
 		public override bool CheckPreconditions()
 		{
-			throw new System.NotImplementedException();
+			
 		}
 	}
 }

@@ -23,7 +23,8 @@ namespace UtilityAi
         // Times to complete actions
         [SerializeField] private int sleepTime;
         [SerializeField] private int eatTime;
-
+        [SerializeField] float droppingBounds;
+        
         [SerializeField] private float maxDistanceFromHome = 20.0f;
         [SerializeField] private GameObject rabbitDroppingPrefab;
         [SerializeField] float rabbitDroppingSpawnRadius = 1.0f;
@@ -32,6 +33,7 @@ namespace UtilityAi
         private bool bFoundFood;
         private bool bIsAtHome;
         private bool bJustEaten;
+        private bool bAwayFromFood;
         
         private GameObject foodObject;
 
@@ -63,6 +65,7 @@ namespace UtilityAi
             sensor = GetComponentInChildren<AISensor>();
             agent = GetComponent<NavMeshAgent>();
             bJustEaten = false;
+
         }
 
         private void Start()
@@ -74,9 +77,9 @@ namespace UtilityAi
         {
             FSMTick();
             _hud.UpdateStatsText(stats);
-            SpawnRabbitDroppings();
+            if(bJustEaten) { SpawnRabbitDroppings(); }
         }
-
+        
         // Simple Finite State machine to control the movement of the rabbit
         private void FSMTick()
         {
@@ -167,33 +170,6 @@ namespace UtilityAi
             }
         }
 
-        private void SpawnRabbitDroppings()
-        {
-            // Check if the rabbit is within the specified distance from its home
-            bIsAtHome = Vector3.Distance(transform.position, rabbitsHome.transform.position) <= maxDistanceFromHome;
-            if (!bIsAtHome && !agent.isStopped && bJustEaten)
-            {
-                if (Random.value < rabbitDroppingSpawnChance)
-                {
-                    Vector3 randomPosition = transform.position + Random.insideUnitSphere * rabbitDroppingSpawnRadius;
-                    Instantiate(rabbitDroppingPrefab, randomPosition, Quaternion.identity);
-                }
-            } 
-        }
-
-        // Found food bool true so set the destination to 
-        private void MoveToFood(GameObject food)
-        {
-            movement.SetDestination(food.transform.position);
-            if (agent.hasPath && agent.remainingDistance < 0.1)
-            {
-                StartCoroutine(PerformAction("Eat", eatTime));
-                bFoundFood = false;
-                bJustEaten = true;
-                StartCoroutine(ReactivateFoodObject(food, 20));
-            }
-        }
-        
         // Set the destination to the rabbits home
         public void GoToBed()
         {
@@ -207,6 +183,40 @@ namespace UtilityAi
             }
         }
         
+        // Found food bool true so set the destination to 
+        private void MoveToFood(GameObject food)
+        {
+            bAwayFromFood = false;
+            movement.SetDestination(food.transform.position);
+            if (agent.hasPath && agent.remainingDistance < 0.1)
+            {
+                StartCoroutine(PerformAction("Eat", eatTime));
+                bFoundFood = false;
+                StartCoroutine(ReactivateFoodObject(food, 20));
+            }
+
+            // bAwayFromFood = Vector3.Distance(transform.position, rabbitsHome.transform.position) <= droppingBounds;
+        }
+
+        // Spawning rabbit poop mid way to next position
+        private void SpawnRabbitDroppings()
+        {
+            if (Random.value < rabbitDroppingSpawnChance)
+            {
+                // Calculate the midpoint between the food position and the next destination
+                Vector3 midpoint = Vector3.Lerp(foodObject.transform.position, movement.GetDestination(), 0.5f);
+                if (Vector3.Distance(transform.position, midpoint) < rabbitDroppingSpawnRadius)
+                {
+                    // Instantiate a rabbit dropping at the midpoint
+                    GameObject rabbitDropping = Instantiate(rabbitDroppingPrefab, midpoint, Quaternion.identity);
+                    Vector3 d = gameObject.transform.forward;
+                    rabbitDropping.GetComponent<RabbitDropping>().RabbitTrail.Set(d.x, d.y, d.z);
+                    rabbitDropping.name = this.name + " Rabbit Dropping ";
+                    bJustEaten = false; // set bJustEaten to false to stop spawning droppings
+                }
+            }
+        }
+
         // Coroutine switch statement to perform time delays on the actions
         IEnumerator PerformAction(string action, int time)
         {
@@ -223,6 +233,8 @@ namespace UtilityAi
                     
                     yield return new WaitForSeconds(time);
                     stats.DecreaseHunger(hungerRepletionRate);
+                    bJustEaten = true;
+                    SpawnRabbitDroppings();
                     break;
             }
             agent.isStopped = false;
@@ -248,7 +260,8 @@ namespace UtilityAi
         // Draw a wireframe sphere around the home transform to show range
         void OnDrawGizmos()
         {
-            Gizmos.color = Color.yellow;
+            // Home bounds
+            Gizmos.color = Color.gray;
             Gizmos.DrawWireSphere(rabbitsHome.transform.position, maxDistanceFromHome);
         }
     }
