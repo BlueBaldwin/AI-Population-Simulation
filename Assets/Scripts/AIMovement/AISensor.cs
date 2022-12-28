@@ -16,7 +16,7 @@ public class AISensor : MonoBehaviour
     public LayerMask detectionLayer;
     public LayerMask occlusionLayer;
     public List<GameObject> objectsWithinSensor; // A list to store all those agents within the sensors cone
-    [SerializeField] protected List<GameObject> rabbitsInRange = new List<GameObject>();
+    [SerializeField] public List<GameObject> rabbitsInRange = new List<GameObject>();
     [SerializeField] protected List<GameObject> foxesInRange = new List<GameObject>();
     [SerializeField] protected List<GameObject> foodInRange = new List<GameObject>();
     [SerializeField] protected List<GameObject> droppingsInRange = new List<GameObject>();

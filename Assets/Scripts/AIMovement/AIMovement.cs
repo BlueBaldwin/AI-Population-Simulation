@@ -9,13 +9,17 @@ namespace UtilityAi
     [RequireComponent(typeof(NavMeshAgent))]
     public class AIMovement : MonoBehaviour
     {
-        private NavMeshAgent _agent;
+        public float StalkSpeed { get; set; }
+        [SerializeField] private float _stalkSpeed;
+        public NavMeshAgent _agent;
         private float _speed;
-        //public Transform destination;
+        public float _maxDistanceFromHome;
+        
         
         private void Start()
         {
             _agent = GetComponent<NavMeshAgent>();
+            StalkSpeed = _stalkSpeed;
         }
         
         private void SetAgentSpeed(float speed)

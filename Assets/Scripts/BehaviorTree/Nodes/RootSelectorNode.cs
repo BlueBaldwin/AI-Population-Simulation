@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UtilityAi;
 
 public class RootSelectorNode : SelectorNode
 {
-    public RootSelectorNode(FoxController foxController, FoxSensor sensor)
+    public RootSelectorNode(FoxController foxController, FoxSensor Sensor, AIMovement aiMovement) : base( foxController, sensor)
     {
         FoxController _foxController = foxController;
-        FoxSensor Sensor = sensor;
+        FoxSensor sensor = Sensor;
+        AIMovement _aiMovement = aiMovement;
 
         // Add the "Search for Prey" sequence node as a child
         SequenceNode searchForPreySequence = new SequenceNode();
         searchForPreySequence.AddChild(new IsHungry(_foxController));
-        searchForPreySequence.AddChild(new SearchForPrey(_foxController, sensor));
+        searchForPreySequence.AddChild(new SearchForPrey(_foxController, sensor, _aiMovement));
         searchForPreySequence.AddChild(new AttackRabbit(_foxController, sensor));
         AddChild(searchForPreySequence);
 

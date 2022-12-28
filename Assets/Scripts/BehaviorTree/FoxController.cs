@@ -47,36 +47,7 @@ public class FoxController : MonoBehaviour
         }
         
         // ACTIONS
-
-        public void Wander()
-        {
-            if (!_foxEntity.hasPath && _foxEntity.remainingDistance < 0.5)
-            {
-                // To be implemented later for moving within the forward direction only until out of home bounds
-                Vector3 currentDirection = transform.forward;
-
-                // Generate a random point within the unit sphere centered at the origin
-                Vector3 wanderPoint = Random.insideUnitSphere * maxDistanceFromHome;
-
-                // Use the NavMesh.SamplePosition function to find a valid point on the navmesh that is closest to the input point
-                NavMeshHit hit;
-                if (NavMesh.SamplePosition(wanderPoint, out hit, maxDistanceFromHome, NavMesh.AllAreas))
-                {
-                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube.transform.position = hit.position;
-
-                    // Set the destination for the navmesh agent to the random point on the navmesh
-                    _aiMovement.SetDestination(hit.position);
-                }
-
-                // If the rabbit has left the home bounds, set the destination to the rabbit home
-                if (Vector3.Distance(transform.position, foxesHome.transform.position) > maxDistanceFromHome)
-                {
-                    _aiMovement.SetDestination(foxesHome.transform.position);
-                }
-            }
-        }
-
+        
         public void MoveTowardsScent(Vector3 dropping)
         {
             if (dropping != null)
@@ -130,5 +101,24 @@ public class FoxController : MonoBehaviour
                 hungerLevel = Mathf.Clamp(hungerLevel, 0, 100);
             }
         }
+
+        public void MoveTowards(Vector3 targetPosition)
+        {
+            _foxEntity.SetDestination(targetPosition);
+        }
+
+        public void Attack(GameObject rabbit)
+        {
+            // Set the destination of the NavMeshAgent to the position of the rabbit
+            _foxEntity.SetDestination(rabbit.transform.position);
+
+            // Check if the fox has reached its destination
+            if (_foxEntity.remainingDistance < 0.1f)
+            {
+                // If the fox has reached its destination, destroy the rabbit game object
+                Destroy(rabbit);
+            }
+        }
+
     }
 
