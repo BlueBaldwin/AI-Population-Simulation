@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using BehaviorTree;
 using UnityEngine;
 using UtilityAi;
 
@@ -10,10 +9,11 @@ public class FoxSensor : AISensor
 {
    FoxController _foxController;
    public bool bFoundTrace { get; private set; }
-   [SerializeField] protected float smellRadii;
-   [SerializeField] private LayerMask droppingLayerMask;
    private HashSet<GameObject> droppingsInRadius = new HashSet<GameObject>();
    public List<GameObject> droppingsList;
+   [SerializeField] private float smellRadius;
+   [SerializeField] private LayerMask droppingLayerMask;
+   public Vector3 ScentLocation { get; set; }
 
    protected override void Start()
    {
@@ -44,7 +44,7 @@ public class FoxSensor : AISensor
    private void DroppingsInRadius()
    {
       droppingsInRadius.Clear();
-      Collider[] foundDroppings = Physics.OverlapSphere(transform.position, smellRadii, droppingLayerMask, QueryTriggerInteraction.Collide);
+      Collider[] foundDroppings = Physics.OverlapSphere(transform.position, smellRadius, droppingLayerMask, QueryTriggerInteraction.Collide);
 
       foreach (Collider c in foundDroppings)
       {
@@ -64,6 +64,35 @@ public class FoxSensor : AISensor
       }
    }
    
+   public bool IsScentDetected()
+   {
+      if (droppingsInRadius.Count > 0)
+      {
+         GameObject closestDropping = GetClosestDropping();
+         if (closestDropping != null)
+         {
+            ScentLocation = closestDropping.transform.position;
+            return true;
+         }
+      }
+      return false;
+   }
+   
+   public GameObject GetClosestDropping()
+   {
+      float closestDistance = float.MaxValue;
+      GameObject closestDropping = null;
+      foreach (GameObject dropping in droppingsInRadius)
+      {
+         float distance = Vector3.Distance(transform.position, dropping.transform.position);
+         if (distance < closestDistance)
+         {
+            closestDistance = distance;
+            closestDropping = dropping;
+         }
+      }
+      return closestDropping;
+   }
    public List<GameObject> GetDroppingsList()
    {
       return droppingsList;
@@ -78,6 +107,6 @@ public class FoxSensor : AISensor
    {
       base.OnDrawGizmos();
       Gizmos.color = Color.yellow ;
-      Gizmos.DrawWireSphere(transform.position, smellRadii);
+      Gizmos.DrawWireSphere(transform.position, smellRadius);
    }
 }

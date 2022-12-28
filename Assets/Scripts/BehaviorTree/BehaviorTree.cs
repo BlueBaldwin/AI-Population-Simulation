@@ -2,35 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BehaviorTree
+public enum BehaviorTreeStatus
 {
-    public class BehaviorTree
-    {
-        protected BehaviorTreeNode _rootNode;
-        private List<BehaviorTreeNode> _nodes;
-    
-        public BehaviorTree()
-        {
-            _nodes = new List<BehaviorTreeNode>();
-        }
+    SUCCESS,
+    FAILURE,
+    RUNNING,
+}
 
-        public void SetRootNode(BehaviorTreeNode rootNode)
-        {
-            _rootNode = rootNode;
-        }
-    
-        public void AddNode(BehaviorTreeNode node)
-        {
-            _nodes.Add(node);
-        }
-    
-        public virtual void Update()
-        {
-            foreach (BehaviorTreeNode node in _nodes)
-            {
-                node.Update();
-            }
-        }
+public class BehaviorTree
+{
+    private Node _rootNode;
+
+    public BehaviorTree(Node rootNode)
+    {
+        _rootNode = rootNode;
+    }
+
+    public void Update()
+    {
+        _rootNode.Update();
     }
 }
+
 

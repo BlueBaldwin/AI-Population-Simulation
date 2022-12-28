@@ -1,30 +1,17 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BehaviorTree
+public abstract class ActionNode : Node
 {
-	public class ActionNode : BehaviorTreeNode
-	{
-		// A function that performs a specific action and returns a `BehaviorTreeStatus` indicating whether the action was successful or not
-		public delegate BehaviorTreeStatus ActionDelegate();
+    private FoxController _foxController;
+    private FoxSensor _sensor;
 
-		private ActionDelegate _action;
+    public ActionNode(FoxController foxController, FoxSensor sensor)
+    {
+        _foxController = foxController;
+        _sensor = sensor;
+    }
 
-		public ActionNode(ActionDelegate action)
-		{
-			_action = action;
-		}
-		
-		public override BehaviorTreeStatus Execute()
-		{
-			// Call the action delegate and return its result
-			return _action();
-		}
-
-		public override bool CheckPreconditions()
-		{
-			
-		}
-	}
+    public abstract override BehaviorTreeStatus Update();
 }

@@ -2,33 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BehaviorTree
+public class SequenceNode : Node
 {
-    public class SequenceNode : BehaviorTreeNode
+    private List<Node> _children;
+    private int _currentChildIndex;
+
+    public SequenceNode()
     {
-        public override BehaviorTreeStatus Execute()
+        _children = new List<Node>();
+        _currentChildIndex = 0;
+    }
+
+    public void AddChild(Node child)
+    {
+        _children.Add(child);
+    }
+
+    public override BehaviorTreeStatus Update()
+    {
+        while (_currentChildIndex < _children.Count)
         {
-            foreach (BehaviorTreeNode child in children)
+            Node currentChild = _children[_currentChildIndex];
+            BehaviorTreeStatus status = currentChild.Update();
+
+            if (status == BehaviorTreeStatus.FAILURE)
             {
-                if (child.Execute() == BehaviorTreeStatus.FAILURE)
-                {
-                    return BehaviorTreeStatus.FAILURE;
-                }
+                _currentChildIndex = 0;
+                return BehaviorTreeStatus.FAILURE;
             }
-            return BehaviorTreeStatus.SUCCESS;
-        }
-    
-        public override bool CheckPreconditions()
-        {
-            foreach (BehaviorTreeNode child in children)
+            else if (status == BehaviorTreeStatus.RUNNING)
             {
-                if (!child.CheckPreconditions())
-                {
-                    return false;
-                }
+                return BehaviorTreeStatus.RUNNING;
             }
-            return true;
+
+            _currentChildIndex++;
         }
+
+        _currentChildIndex = 0;
+        return BehaviorTreeStatus.SUCCESS;
     }
 }
 

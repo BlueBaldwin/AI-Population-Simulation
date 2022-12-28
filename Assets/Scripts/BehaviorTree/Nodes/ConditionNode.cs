@@ -1,30 +1,21 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BehaviorTree
+public abstract class ConditionNode : Node
 {
-    public class ConditionNode : BehaviorTreeNode
+    public abstract bool Check();
+
+    public override BehaviorTreeStatus Update()
     {
-        // A function that returns a boolean value indicating whether the condition is met or not
-        public delegate bool ConditionDelegate();
-
-        private ConditionDelegate _condition;
-
-        public ConditionNode(ConditionDelegate condition)
+        if (Check())
         {
-            _condition = condition;
+            return BehaviorTreeStatus.SUCCESS;
         }
-
-        public override BehaviorTreeStatus Execute()
+        else
         {
-            return _condition() ? BehaviorTreeStatus.SUCCESS : BehaviorTreeStatus.FAILURE;
-
-        }
-
-        public override bool CheckPreconditions()
-        {
-            return true;
+            return BehaviorTreeStatus.FAILURE;
         }
     }
 }
+

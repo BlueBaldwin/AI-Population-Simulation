@@ -2,39 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BehaviorTree
+public class SelectorNode : Node
 {
-    public class SelectorNode : BehaviorTreeNode
-    {
-        public override BehaviorTreeStatus Execute()
-        {
-            // Iterate through all children nodes
-            foreach (BehaviorTreeNode child in children)
-            {
-                // Check the preconditions for the child node
-                if (child.CheckPreconditions())
-                {
-                    // If the preconditions are met, execute the child node
-                    BehaviorTreeStatus childStatus = child.Execute();
+    private List<Node> _children;
+    private int _currentChildIndex;
 
-                    // If the child node returns a success status, return a success status
-                    if (childStatus == BehaviorTreeStatus.SUCCESS)
-                    {
-                        return BehaviorTreeStatus.SUCCESS;
-                    }
-                }
+    public SelectorNode()
+    {
+        _children = new List<Node>();
+        _currentChildIndex = 0;
+    }
+
+    public void AddChild(Node child)
+    {
+        _children.Add(child);
+    }
+
+    public override BehaviorTreeStatus Update()
+    {
+        while (_currentChildIndex < _children.Count)
+        {
+            Node currentChild = _children[_currentChildIndex];
+            BehaviorTreeStatus status = currentChild.Update();
+
+            if (status == BehaviorTreeStatus.SUCCESS)
+            {
+                _currentChildIndex = 0;
+                return BehaviorTreeStatus.SUCCESS;
+            }
+            else if (status == BehaviorTreeStatus.RUNNING)
+            {
+                return BehaviorTreeStatus.RUNNING;
             }
 
-            // If none of the children returned a success status, return a failure status
-            return BehaviorTreeStatus.FAILURE;
+            _currentChildIndex++;
         }
 
-
-        public override bool CheckPreconditions()
-        {
-            // No preconditions for a SelectorNode
-            return true;
-        }
+        _currentChildIndex = 0;
+        return BehaviorTreeStatus.FAILURE;
     }
 }
 

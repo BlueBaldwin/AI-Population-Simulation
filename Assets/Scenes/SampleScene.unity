@@ -534,6 +534,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 569484108241877140, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
+      propertyPath: smellRadius
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 569484108241877140, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
+        type: 3}
       propertyPath: scanFrequency
       value: 30
       objectReference: {fileID: 0}
@@ -545,12 +550,17 @@ PrefabInstance:
     - target: {fileID: 569484108241877140, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
       propertyPath: foxesInRange.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 569484108241877140, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
       propertyPath: droppingLayerMask.m_Bits
       value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 569484108241877140, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
+        type: 3}
+      propertyPath: droppingsList.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 569484108241877140, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
@@ -560,7 +570,7 @@ PrefabInstance:
     - target: {fileID: 569484108241877140, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
       propertyPath: objectsWithinSensor.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 569484108241877140, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
@@ -595,7 +605,7 @@ PrefabInstance:
     - target: {fileID: 2007312861542640431, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.54
+      value: -18.19
       objectReference: {fileID: 0}
     - target: {fileID: 2007312861542640431, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
@@ -634,13 +644,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2483559982578871301, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 2483559982578871301, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
+        type: 3}
       propertyPath: m_LocalPosition.y
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2483559982578871301, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7404351170751790416, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
         type: 3}
@@ -682,6 +697,11 @@ PrefabInstance:
       propertyPath: objectsWithinSensor.Array.data[1]
       value: 
       objectReference: {fileID: 821908741}
+    - target: {fileID: 7751205499055217165, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c,
+        type: 3}
+      propertyPath: attackRange
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6306b0ba4408fdf4e972e4a2ebf39b5c, type: 3}
 --- !u!1 &1777318122
@@ -869,7 +889,7 @@ PrefabInstance:
     - target: {fileID: 3492777078555904900, guid: db7d6dab8d2d0c2439873d43431ee008,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.77
+      value: -9.5
       objectReference: {fileID: 0}
     - target: {fileID: 3492777078555904900, guid: db7d6dab8d2d0c2439873d43431ee008,
         type: 3}
@@ -909,7 +929,7 @@ PrefabInstance:
     - target: {fileID: 6311826314932690522, guid: db7d6dab8d2d0c2439873d43431ee008,
         type: 3}
       propertyPath: lifeSpan
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db7d6dab8d2d0c2439873d43431ee008, type: 3}
