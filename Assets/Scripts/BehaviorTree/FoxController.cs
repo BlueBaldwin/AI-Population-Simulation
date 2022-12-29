@@ -109,14 +109,19 @@ public class FoxController : MonoBehaviour
 
         public void Attack(GameObject rabbit)
         {
-            // Set the destination of the NavMeshAgent to the position of the rabbit
-            _foxEntity.SetDestination(rabbit.transform.position);
-
-            // Check if the fox has reached its destination
-            if (_foxEntity.remainingDistance < 0.1f)
+            if (rabbit != null)
             {
-                // If the fox has reached its destination, destroy the rabbit game object
-                Destroy(rabbit);
+                // Set the destination of the NavMeshAgent to the position of the rabbit
+                _foxEntity.SetDestination(rabbit.transform.position);
+
+                // Check if the fox has reached its destination
+                if (_foxEntity.remainingDistance < 2f && _foxEntity.remainingDistance > 0.1)
+                {
+                    if (rabbit != null)
+                    {
+                        Destroy(rabbit);
+                    }
+                }
             }
         }
 
