@@ -15,7 +15,6 @@ namespace UtilityAi
         private float _speed;
         public float _maxDistanceFromHome;
         
-        
         private void Start()
         {
             _agent = GetComponent<NavMeshAgent>();

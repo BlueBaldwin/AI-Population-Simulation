@@ -31,7 +31,7 @@ public class FollowScent : ActionNode
             _foxController.MoveTowardsScent(_sensor.ScentLocation);
 
             // Check if the fox has reached the location of the rabbit droppings
-            if (_foxController._aiMovement._agent.remainingDistance < 0.1)
+            if (_foxController._aiMovement._agent.hasPath && _foxController._aiMovement._agent.remainingDistance < 0.1)
             {
                 Debug.Log("Fox has reached scent location");
                 return BehaviorTreeStatus.SUCCESS;

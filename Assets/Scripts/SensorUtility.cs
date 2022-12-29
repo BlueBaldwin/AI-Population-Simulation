@@ -25,11 +25,7 @@ public static class SensorUtility
 
     public static GameObject FindClosestTaggedGoInList(AISensor sensor, List<GameObject> list, string tag)
     {
-        // List<GameObject> objects = GetObjectsInRange(sensor, tag);
-        // Create a variable to store the closest game object
         GameObject closestGameObject = null;
-        // Create a variable to store the closest distance
-
         float closestDistance = float.MaxValue;
         // Iterate through all game objects in the list
         foreach (GameObject gameObject in list)
@@ -53,12 +49,4 @@ public static class SensorUtility
         // Return the closest game object with the specified tag
         return closestGameObject;
     }
-
-
-
-    public static T GetComponent<T>(AISensor sensor) where T : Component
-    {
-        return sensor.gameObject.GetComponentInParent<T>();
-    }
-
 }

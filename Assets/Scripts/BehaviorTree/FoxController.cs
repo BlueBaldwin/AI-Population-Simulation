@@ -12,28 +12,37 @@ public class FoxController : MonoBehaviour
         // private FoxBehaviorTree _foxBehaviorTree;
         [SerializeField] private float attackRange;
         [SerializeField] private GameObject foxesHome;
-        [SerializeField] private float energyDecreaseRate = 5; 
+        [SerializeField] private float lowEnergy = 30; 
+        [SerializeField] private int highHunger = 40; 
+        [SerializeField] private int energyDecreaseRate = 5; 
+        [SerializeField] private int energyIncreaseRate = 100; 
+        [SerializeField] private int hungerDecreaseRate = 5; 
+        [SerializeField] private int hungerIncreaseRate = 25; 
         
         private float hungerLevel;
         private float energyLevel;
        
         public FoxSensor FoxSensor { get; private set; }
-        public float AttackRange => attackRange;
+        
         private NavMeshAgent _foxEntity;
         [SerializeField] private float maxDistanceFromHome; 
 
         private BehaviorTree _behaviorTree;
         public AIMovement _aiMovement;
         private FoxSensor _foxSensor;
+        public FoxStats foxStats;
         
         private void Awake()
         {
             _foxSensor = GetComponentInChildren<FoxSensor>();
             _foxEntity = GetComponent<NavMeshAgent>();
             _aiMovement = GetComponent<AIMovement>();
+            
             // Create a new behavior tree and set the root node
             _behaviorTree = new BehaviorTree(new RootSelectorNode(this, _foxSensor, _aiMovement));
             StartCoroutine(DecreaseEnergyAndHunger());
+
+            foxStats = new FoxStats(100, 100, 10);
         }
 
         private void Start()
@@ -60,8 +69,9 @@ public class FoxController : MonoBehaviour
         public bool GoToBed()
         {
             _aiMovement.SetDestination(foxesHome.transform.position);
-            if (_foxEntity.remainingDistance <= 0.1)
+            if (_foxEntity.remainingDistance <= 0.2)
             {
+                foxStats.Energy += energyIncreaseRate;
                 return true;
             }
             return false;
@@ -69,22 +79,27 @@ public class FoxController : MonoBehaviour
         
         public void Eat()
         {
-            // Decrease the fox's hunger level by a certain amount
-            hungerLevel -= 25;
-            // Clamp the hunger level to a range of 0 to 100
-            hungerLevel = Mathf.Clamp(hungerLevel, 0, 100);
+            foxStats.Hunger -= hungerDecreaseRate;
         }
 
         // CONDITIONS
         
         public bool IsTired()
         {
-            // Return true if the fox's energy level is low, false otherwise
-            return false;
+            if (foxStats.Energy > lowEnergy)
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool IsHungry()
         {
+            if (foxStats.Hunger < highHunger)
+            {
+                return false;
+            }
+
             return true;
         }
         
@@ -94,11 +109,8 @@ public class FoxController : MonoBehaviour
             while (true)
             {
                 yield return new WaitForSeconds(energyDecreaseRate);
-                energyLevel--;
-                hungerLevel++;
-                // Clamp the energy and hunger levels to a maximum and minimum value
-                energyLevel = Mathf.Clamp(energyLevel, 0, 100);
-                hungerLevel = Mathf.Clamp(hungerLevel, 0, 100);
+                foxStats.Energy -= energyDecreaseRate;
+                foxStats.Hunger -= hungerIncreaseRate;
             }
         }
 

@@ -48,23 +48,20 @@ namespace UtilityAi
         public GameObject rabbitsHome;
 
         public Stats stats;
-
+    
 
         private void Awake()
         {
-            // Place home
             rabbitsHome = Instantiate(rabbitsHome, transform.position, Quaternion.identity);
-
             CurrentState = STATE.DECIDE;
             stats = new Stats(100,100);
-            // Initialise
+            
             AIBrain = GetComponent<AIBrain>();
             _hud = GetComponentInChildren<HUD>();
             movement = GetComponent<AIMovement>();
             sensor = GetComponentInChildren<AISensor>();
             agent = GetComponent<NavMeshAgent>();
             bJustEaten = false;
-
         }
 
         private void Start()
@@ -79,7 +76,6 @@ namespace UtilityAi
             if(bJustEaten) { SpawnRabbitDroppings(); }
         }
         
-        // Simple Finite State machine to control the movement of the rabbit
         private void FSMTick()
         {
             // If the current state is DECIDE, find the best action and execute it
@@ -251,8 +247,7 @@ namespace UtilityAi
             foodObject = food;
             bFoundFood = true;
         }
-
-
+        
         // Draw a wireframe sphere around the home transform to show range
         void OnDrawGizmos()
         {

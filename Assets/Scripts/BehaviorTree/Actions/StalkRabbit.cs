@@ -30,7 +30,7 @@ public class StalkRabbit : ActionNode
 
             // Check if the fox is within attack range of the rabbit
             if (Vector3.Distance(_foxController.transform.position, closestRabbit.transform.position) <=
-                _foxController.AttackRange)
+                _foxController.foxStats.AttackRange)
             {
                 // If the fox is within attack range, return SUCCESS
                 return BehaviorTreeStatus.SUCCESS;

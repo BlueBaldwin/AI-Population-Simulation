@@ -22,7 +22,7 @@ public class AttackRabbit : ActionNode
             GameObject closestRabbit = SensorUtility.FindClosestTaggedGoInList(_sensor, _sensor.rabbitsInRange, "Rabbit");
 
             // Check if the fox is within attack range of the closest rabbit
-            if (Vector3.Distance(_foxController.transform.position, closestRabbit.transform.position) <= _foxController.AttackRange)
+            if (Vector3.Distance(_foxController.transform.position, closestRabbit.transform.position) <= _foxController.foxStats.AttackRange)
             {
                 // Attack the rabbit
                 Debug.Log("Attacking rabbit: " + closestRabbit.name);

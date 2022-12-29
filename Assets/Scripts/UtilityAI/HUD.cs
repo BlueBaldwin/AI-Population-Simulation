@@ -16,7 +16,6 @@ using UtilityAi;
 
 		public void UpdateStatsText(Stats stats)
 		{
-			//currentAction.text = brain.bestAction;
 			energy.text = "Energy: " + stats.Energy.ToString();
 			hunger.text = "Hunger: " + stats.Hunger.ToString();
 		}

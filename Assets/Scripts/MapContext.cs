@@ -22,20 +22,9 @@ public class MapContext : MonoBehaviour
      {
 	     Renderer r = ground.GetComponent<Renderer>();
 	     bounds = r.bounds;
-      //
-	     // //SpawnFood();
-	     //
-      //    // List<Transform> sleepDestinations = new List<Transform>() { home.transform };
-      //    // List<Transform> drinkDestinations = new List<Transform>() { water.transform };
+      
       List<Transform> eatDestinations = SpawnRabbitFood();
-      //
-      //    Destinations = new Dictionary<DestinationType, List<Transform>>()
-      //    {
-      //        // { DestinationType.EAT, sleepDestinations },
-      //        // { DestinationType.DRINK, drinkDestinations },
-      //        { DestinationType.EAT, eatDestinations }
-      //    };
-    }
+     }
  
      private List<Transform> SpawnRabbitFood()
      {
