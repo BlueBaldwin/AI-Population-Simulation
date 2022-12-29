@@ -191,7 +191,7 @@ namespace UtilityAi
                 StartCoroutine(PerformAction("Eat", eatTime));
                 bFoundFood = false;
                 StartCoroutine(ReactivateFoodObject(food, 20));
-            }
+            } 
         }
 
         // Spawning rabbit poop mid way to next position

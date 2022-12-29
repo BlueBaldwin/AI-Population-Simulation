@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UtilityAi;
 
 public class RootSelectorNode : SelectorNode
@@ -10,7 +11,11 @@ public class RootSelectorNode : SelectorNode
     public RootSelectorNode(FoxController foxController, FoxSensor sensor, AIMovement aiMovement) : base(foxController, sensor)
     {
         _aiMovement = aiMovement;
-
+        NavMeshAgent _agent = aiMovement._agent; 
+        // Seperate attack action
+        ActionNode attackRabbitAction = new AttackRabbit(foxController, sensor);
+        AddChild(attackRabbitAction);
+        
         // Create the sequence for going to sleep
         SequenceNode goToSleepSequence = new SequenceNode();
         goToSleepSequence.AddChild(new IsTired(foxController));
@@ -27,7 +32,7 @@ public class RootSelectorNode : SelectorNode
         AddChild(findStalkAndAttackSequence);
 
         // Set the default action to wander
-        AddChild(new Wander(foxController, sensor, _aiMovement));
+        AddChild(new Wander(foxController, sensor, _aiMovement, _agent));
     }
 }
 

@@ -23,7 +23,7 @@ public class FoxController : MonoBehaviour
         [SerializeField] private float maxDistanceFromHome; 
 
         private BehaviorTree _behaviorTree;
-        private AIMovement _aiMovement;
+        public AIMovement _aiMovement;
         private FoxSensor _foxSensor;
         
         private void Awake()

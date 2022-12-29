@@ -8,15 +8,23 @@ public class Wander : ActionNode
 {
     private AIMovement _aiMovement;
     private NavMeshAgent _agent;
+    private FoxController _foxController;
+    private FoxSensor _sensor;
 
-    public Wander(FoxController foxController, FoxSensor sensor, AIMovement aiMovement) : base(foxController, sensor)
+    public Wander(FoxController foxController, FoxSensor sensor, AIMovement aiMovement, NavMeshAgent agent) : base(foxController, sensor)
     {
         _aiMovement = aiMovement;
-        _agent = aiMovement._agent;
+        _agent = agent;
+        _foxController = foxController;
+        _sensor = sensor;
     }
     
     public override BehaviorTreeStatus Update()
     {
+        if (_sensor.rabbitsInRange.Count > 0)
+        {
+            return BehaviorTreeStatus.FAILURE;
+        }
         // Check if the AI agent has a path or has reached its destination
         if (!_agent.hasPath && _agent.remainingDistance < 0.5)
         {
