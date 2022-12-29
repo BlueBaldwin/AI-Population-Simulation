@@ -33,8 +33,7 @@ namespace UtilityAi
         private bool bFoundFood;
         private bool bIsAtHome;
         private bool bJustEaten;
-        private bool bAwayFromFood;
-        
+
         private GameObject foodObject;
 
         private HUD _hud;
@@ -186,7 +185,6 @@ namespace UtilityAi
         // Found food bool true so set the destination to 
         private void MoveToFood(GameObject food)
         {
-            bAwayFromFood = false;
             movement.SetDestination(food.transform.position);
             if (agent.hasPath && agent.remainingDistance < 0.1)
             {
@@ -194,8 +192,6 @@ namespace UtilityAi
                 bFoundFood = false;
                 StartCoroutine(ReactivateFoodObject(food, 20));
             }
-
-            // bAwayFromFood = Vector3.Distance(transform.position, rabbitsHome.transform.position) <= droppingBounds;
         }
 
         // Spawning rabbit poop mid way to next position

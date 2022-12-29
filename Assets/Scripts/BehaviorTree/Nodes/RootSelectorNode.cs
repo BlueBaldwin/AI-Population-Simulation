@@ -5,28 +5,30 @@ using UtilityAi;
 
 public class RootSelectorNode : SelectorNode
 {
-    public RootSelectorNode(FoxController foxController, FoxSensor Sensor, AIMovement aiMovement) : base( foxController, sensor)
+    private AIMovement _aiMovement;
+
+    public RootSelectorNode(FoxController foxController, FoxSensor sensor, AIMovement aiMovement) : base(foxController, sensor)
     {
-        FoxController _foxController = foxController;
-        FoxSensor sensor = Sensor;
-        AIMovement _aiMovement = aiMovement;
+        _aiMovement = aiMovement;
 
-        // Add the "Search for Prey" sequence node as a child
-        SequenceNode searchForPreySequence = new SequenceNode();
-        searchForPreySequence.AddChild(new IsHungry(_foxController));
-        searchForPreySequence.AddChild(new SearchForPrey(_foxController, sensor, _aiMovement));
-        searchForPreySequence.AddChild(new AttackRabbit(_foxController, sensor));
-        AddChild(searchForPreySequence);
+        // Create the sequence for going to sleep
+        SequenceNode goToSleepSequence = new SequenceNode();
+        goToSleepSequence.AddChild(new IsTired(foxController));
+        goToSleepSequence.AddChild(new GoToSleep(foxController, sensor));
 
-        // Add the "Reproduce" sequence node as a child
-        SequenceNode reproduceSequence = new SequenceNode();
-        reproduceSequence.AddChild(new IsHungry(_foxController));
-        reproduceSequence.AddChild(new IsTired(_foxController));
-        //reproduceSequence.AddChild(new Reproduce(_foxController));
-        AddChild(reproduceSequence);
+        // Create the sequence for finding, stalking and attacking prey
+        SequenceNode findStalkAndAttackSequence = new SequenceNode();
+        findStalkAndAttackSequence.AddChild(new FollowScent(foxController, sensor));
+        findStalkAndAttackSequence.AddChild(new StalkRabbit(foxController, sensor, _aiMovement));
+        findStalkAndAttackSequence.AddChild(new AttackRabbit(foxController, sensor));
 
-        // Add the "Go to Sleep" action node as a child
-        AddChild(new GoToSleep(_foxController, sensor));
+        // Add the go to sleep and find, stalk and attack sequences as children of the root node
+        AddChild(goToSleepSequence);
+        AddChild(findStalkAndAttackSequence);
+
+        // Set the default action to wander
+        AddChild(new Wander(foxController, sensor, _aiMovement));
     }
 }
+
 

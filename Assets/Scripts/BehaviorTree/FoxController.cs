@@ -32,7 +32,7 @@ public class FoxController : MonoBehaviour
             _foxEntity = GetComponent<NavMeshAgent>();
             _aiMovement = GetComponent<AIMovement>();
             // Create a new behavior tree and set the root node
-            _behaviorTree = new BehaviorTree(new RootSelectorNode(this, _foxSensor));
+            _behaviorTree = new BehaviorTree(new RootSelectorNode(this, _foxSensor, _aiMovement));
             StartCoroutine(DecreaseEnergyAndHunger());
         }
 

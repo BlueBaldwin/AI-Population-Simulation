@@ -15,7 +15,7 @@ public class MoveTowardsRabbit : ActionNode
     {
         _foxController = foxController;
         _sensor = sensor;
-        _agent = aiMovement._agent;
+        _aiMovement = aiMovement;
     }
 
     public override BehaviorTreeStatus Update()
